@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: cloudcare-hms
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn run:app
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: cloudcare-db
+          property: connectionString
+      - key: STORAGE_PROVIDER
+        value: local
+      - key: HOSPITAL_NAME
+        value: CloudCare Smart Hospital
+
+databases:
+  - name: cloudcare-db
+    databaseName: cloudcare_db
+    user: cloudadmin
+    plan: free
